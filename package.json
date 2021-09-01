@@ -1,0 +1,78 @@
+{
+  "name": "swebrtc",
+  "version": "0.0.0-development",
+  "description": "WebRTC wrapper",
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iamkhan21/swebrtc.git"
+  },
+  "license": "Apache-2.0",
+  "author": "Ivan Khanevich <mail@iamkhan.tech>",
+  "main": "dist/main/index.js",
+  "module": "dist/module/index.js",
+  "typings": "dist/typings/index.d.ts",
+  "files": [
+    "dist/",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "npm-run-all clean -p build:*",
+    "build:main": "swc src -d dist/main --config-file swc_configs/main/.swcrc",
+    "build:module": "swc src -d dist/module --config-file swc_configs/module/.swcrc",
+    "build:typings": "tsc --emitDeclarationOnly --outDir dist/typings",
+    "prepare": "npm run build",
+    "semantic-release": "semantic-release",
+    "test": "jest --coverage",
+    "lint-staged": "lint-staged",
+    "update:deps": "npx npm-check-updates -i && npm i"
+  },
+  "pre-commit": [
+    "lint-staged",
+    "test"
+  ],
+  "lint-staged": {
+    "*.ts": [
+      "prettier --write",
+      "eslint --fix",
+      "eslint"
+    ]
+  },
+  "dependencies": {
+    "get-browser-rtc": "^1.1.0"
+  },
+  "devDependencies": {
+    "@swc/cli": "0.1.49",
+    "@swc/core": "1.2.83",
+    "@types/jest": "27.0.1",
+    "@typescript-eslint/eslint-plugin": "4.30.0",
+    "@typescript-eslint/parser": "4.30.0",
+    "eslint": "7.32.0",
+    "jest": "27.1.0",
+    "lint-staged": "^11.1.2",
+    "npm-run-all": "4.1.5",
+    "pre-commit": "^1.2.2",
+    "prettier": "2.3.2",
+    "prettier-plugin-packagejson": "2.2.11",
+    "rimraf": "3.0.2",
+    "semantic-release": "^17.4.7",
+    "semantic-release-cli": "5.4.3",
+    "ts-jest": "27.0.5",
+    "ts-node": "10.2.1",
+    "typescript": "4.4.2"
+  },
+  "renovate": {
+    "extends": [
+      "config:js-lib",
+      ":automergePatch",
+      ":automergeBranch",
+      ":automergePatch",
+      ":automergeBranch",
+      ":automergeLinters",
+      ":automergeTesters",
+      ":automergeTypes"
+    ]
+  }
+}
