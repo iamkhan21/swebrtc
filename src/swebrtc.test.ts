@@ -1,18 +1,19 @@
 import { Swebrtc } from "./swebrtc";
 import { Signal, WebRTCEvents } from "./types";
 
-jest.mock("get-browser-rtc", () => () => ({
-  RTCPeerConnection: jest.fn(() => ({
-    setLocalDescription: jest.fn(),
-    setRemoteDescription: jest.fn(),
-    createAnswer: jest.fn(() => ({ answer: "answer" })),
-    createOffer: jest.fn(() => ({ offer: "offer" })),
-    addTrack: jest.fn(),
-    addIceCandidate: jest.fn(),
-  })),
-  RTCSessionDescription: jest.fn(),
-  RTCIceCandidate: jest.fn(),
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+globalThis.RTCPeerConnection = jest.fn(() => ({
+  setLocalDescription: jest.fn(),
+  setRemoteDescription: jest.fn(),
+  createAnswer: jest.fn(() => ({ answer: "answer" })),
+  createOffer: jest.fn(() => ({ offer: "offer" })),
+  addTrack: jest.fn(),
+  addIceCandidate: jest.fn(),
 }));
+
+globalThis.RTCSessionDescription = jest.fn();
+globalThis.RTCIceCandidate = jest.fn();
 
 describe("Swebrtc", () => {
   it("should trigger callbacks", async () => {

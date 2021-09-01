@@ -1,5 +1,4 @@
 import { Signal, SignalTypes, WebRTCEvents } from "./types";
-import * as getBrowserRTC from "get-browser-rtc";
 
 const defaultConfig: RTCConfiguration = {
   iceServers: [
@@ -15,7 +14,6 @@ const defaultConfig: RTCConfiguration = {
 
 export class Swebrtc {
   private readonly _isInitiator: boolean;
-  private readonly _wrtc;
   private readonly _pc: RTCPeerConnection;
   private _signalHandler: (event: Signal) => void = () => {
     return;
@@ -26,14 +24,12 @@ export class Swebrtc {
       throw new Error("No WebRTC support: library should be used in browser");
     }
 
-    this._wrtc = getBrowserRTC();
-
-    if (!this._wrtc) {
+    if (!globalThis.RTCPeerConnection) {
       throw new Error("No WebRTC support: Not a supported browser");
     }
     this._isInitiator = isInitiator;
 
-    this._pc = new this._wrtc.RTCPeerConnection(config);
+    this._pc = new globalThis.RTCPeerConnection(config);
     this._pc.onicecandidate = this.handleIceCandidate;
   }
 
@@ -94,11 +90,13 @@ export class Swebrtc {
     }
   }
 
-  private handleSession(signal: Signal) {
+  private async handleSession(signal: Signal) {
     const data = signal.offer || signal.answer;
-    const remoteDesc = new this._wrtc.RTCSessionDescription(data);
+    const remoteDesc = new globalThis.RTCSessionDescription(
+      data as RTCSessionDescription
+    );
 
-    this._pc.setRemoteDescription(remoteDesc);
+    await this._pc.setRemoteDescription(remoteDesc);
   }
 
   private async createAnswer() {
