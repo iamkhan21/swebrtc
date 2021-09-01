@@ -17,7 +17,9 @@ export class Swebrtc {
   private readonly _isInitiator: boolean;
   private readonly _wrtc;
   private readonly _pc: RTCPeerConnection;
-  private _signalHandler: (event: Signal) => void;
+  private _signalHandler: (event: Signal) => void = () => {
+    return;
+  };
 
   constructor({ config = defaultConfig, isInitiator = false } = {}) {
     if (typeof window === "undefined") {
@@ -113,7 +115,7 @@ export class Swebrtc {
     this._signalHandler({ type: SignalTypes.offer, offer });
   }
 
-  private handleIceCandidate(event) {
+  private handleIceCandidate(event: RTCPeerConnectionIceEvent) {
     if (event.candidate && this._signalHandler) {
       this._signalHandler({
         type: SignalTypes.iceCandidate,
@@ -123,7 +125,7 @@ export class Swebrtc {
   }
 
   private handleExternalStream(cb: (stream: MediaStream | null) => void) {
-    return (event) => {
+    return (event: RTCTrackEvent) => {
       const stream = new MediaStream();
       event.streams[0].getTracks().forEach((track) => {
         stream.addTrack(track);

@@ -12,4 +12,8 @@ export enum SignalTypes {
 }
 
 export type Signal = Required<{ type: SignalTypes }> &
-  Partial<{ answer: unknown; offer: unknown; iceCandidate: unknown }>;
+  Partial<{
+    answer: unknown;
+    offer: unknown;
+    iceCandidate: RTCIceCandidateInit;
+  }>;
