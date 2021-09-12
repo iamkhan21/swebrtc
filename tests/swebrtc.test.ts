@@ -174,7 +174,7 @@ describe("Swebrtc", function () {
       });
     });
 
-    it("should add and send stream to other peer", (done) => {
+    it.skip("should add and send stream to other peer", (done) => {
       p1 = createPeer();
       p2 = createPeer(true);
 
