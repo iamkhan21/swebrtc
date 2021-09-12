@@ -1,3 +1,9 @@
+export type Wrtc = {
+  RTCPeerConnection: any;
+  RTCSessionDescription: any;
+  RTCIceCandidate: any;
+};
+
 export enum WebRTCEvents {
   signal = "signal",
   stream = "stream",
